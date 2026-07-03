@@ -34,7 +34,7 @@ func (c ServeCommand) Run(inputArgs []string) int {
 	args := Arguments{
 		// defaults
 		DataDirectory: "../../api-definitions/",
-		Port:          8080,
+		Port:          8083,
 		ServiceNames:  nil,
 	}
 	if err := args.Parse(inputArgs); err != nil {
