@@ -64,12 +64,12 @@ var CommonIDTypes = []commonIdMatcher{
 	commonIdManagedDisk{},
 	commonIdSharedImageGallery{},
 
-	// CosmosDB
-	commonIdCosmosDBCassandraRoleAssignment{},
-	commonIdCosmosDBGremlinRoleAssignment{},
-	commonIdCosmosDBMongoMIRoleAssignment{},
-	commonIdCosmosDBSqlRoleAssignment{},
-	commonIdCosmosDBTableRoleAssignment{},
+	//
+	commonIdCassandraRoleAssignment{},
+	commonIdGremlinRoleAssignment{},
+	commonIdMongoMIRoleAssignment{},
+	commonIdSqlRoleAssignment{},
+	commonIdTableRoleAssignment{},
 
 	// HDInsight
 	commonIdHDInsightCluster{},
