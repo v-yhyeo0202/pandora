@@ -4,6 +4,10 @@
 package dataworkarounds
 
 import (
+	"errors"
+	"fmt"
+	"slices"
+
 	sdkModels "github.com/hashicorp/pandora/tools/data-api-sdk/v1/models"
 )
 
@@ -21,6 +25,34 @@ func (workaroundCosmosdbIncorrectScopeIdentification) Name() string {
 }
 
 func (workaroundCosmosdbIncorrectScopeIdentification) Process(input sdkModels.APIVersion) (*sdkModels.APIVersion, error) {
+	resource, ok := input.Resources["Openapis"]
+	if !ok {
+		return nil, errors.New("expected a Resource named `Openapis` but  didn't get one")
+	}
+
+	resourceIdKeys := []string{
+		"CassandraRoleAssignmentId",
+		"GremlinRoleAssignmentId",
+		"MongoMIRoleAssignmentId",
+		"SqlRoleAssignmentId",
+		"TableRoleAssignmentId",
+	}
+
+	for _, resourceIdKey := range resourceIdKeys {
+		resourceId, ok := resource.ResourceIDs[resourceIdKey]
+		if !ok {
+			return nil, fmt.Errorf("couldn't find Resource ID `%s`", resourceIdKey)
+		}
+
+		index := slices.IndexFunc(resourceId.Segments, func(segment sdkModels.ResourceIDSegment) bool {
+			return segment.Name == "roleAssignmentId"
+		})
+		resourceId.Segments[index].Name = "roleAssignmentGuid"
+		resourceId.Segments[index].ExampleValue = "roleAssignmentGuid"
+		resource.ResourceIDs[resourceIdKey] = resourceId
+	}
+
+	input.Resources["Openapis"] = resource
 
 	return &input, nil
 }
